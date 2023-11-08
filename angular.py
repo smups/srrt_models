@@ -71,11 +71,15 @@ potential = anguelova.calc_V_array(
 np.save("./out/angular_potential.npy", potential)
 del potential
 
-array1 = anguelova.evaluate(args, *extent, order='exact')
-array2 = anguelova.evaluate(args, *extent, order='leading')
-np.save("./out/angular_exact.npy", array1)
-np.save("./out/angular_leading.npy", array2)
-del array1, array2
+exact = anguelova.evaluate(args, *extent, order='exact')
+np.save("./out/angular_exact.npy", exact)
+del exact
+leading = anguelova.evaluate(args, *extent, order='leading')
+np.save("./out/angular_leading.npy", leading)
+del leading
+delta = anguelova.calc_delta(args, *extent)
+np.save("./out/angular_delta.npy", delta)
+del delta
 
 qdif = anguelova.flag_quantum_dif(args, *extent, accuracy=1e-2)
 np.save("./out/angular_qdif.npy", qdif)
