@@ -115,21 +115,25 @@ extent = (0.46, 0.50, θ_start, θ_stop)
 ################################################################################
 #                             run and save numerics                            #
 ################################################################################
-array1 = anguelova.evaluate(parameters, *extent1, N_x0=N, N_x1=N, order='exact')
-array2 = anguelova.evaluate(parameters, *extent1, N_x0=N, N_x1=N, order='leading')
-np.save("./out/d5_exact.npy", array1)
-np.save("./out/d5_leading.npy", array2)
-del array1, array2
+exact = anguelova.evaluate(parameters, *extent1, N_x0=N, N_x1=N, order='exact')
+np.save("./out/d5_exact.npy", exact)
+del exact
+leading = anguelova.evaluate(parameters, *extent1, N_x0=N, N_x1=N, order='leading')
+np.save("./out/d5_leading.npy", leading)
+del leading
+delta = anguelova.calc_delta(parameters, *extent1, N_x0=N, N_x1=N)
+np.save("./out/d5_delta.npy", delta)
+del delta
 
-qdif = anguelova.flag_quantum_dif(parameters, *extent, accuracy=1e-2)
-np.save("./out/d5_qdif.npy", qdif)
-del qdif
+# qdif = anguelova.flag_quantum_dif(parameters, *extent, accuracy=1e-2)
+# np.save("./out/d5_qdif.npy", qdif)
+# del qdif
 
-r_start, r_stop = 0.4, 0.6
-potential = anguelova.calc_V_array(
-  parameters,
-  [r_start, θ_start],
-  [r_stop, θ_stop],
-  [N, N]
-)
-np.save("./out/d5_potential.npy", potential)
+# r_start, r_stop = 0.4, 0.6
+# potential = anguelova.calc_V_array(
+#   parameters,
+#   [r_start, θ_start],
+#   [r_stop, θ_stop],
+#   [N, N]
+# )
+# np.save("./out/d5_potential.npy", potential)
