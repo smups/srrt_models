@@ -20,7 +20,7 @@ V = a/2 * ( (mp*p)**2 + (mx*x)**2 ).nsimplify()
 
 #setup the metric
 metric_diagonal = 6*a / (1 - p**2 - x**2)**2
-metric = [[0 for i in range(2)] for i in range(2)]
+metric = [[0 for _ in range(2)] for _ in range(2)]
 metric[0][0] = metric_diagonal
 metric[1][1] = metric_diagonal
 
@@ -54,9 +54,9 @@ m_phi = 2e-5
 m_chi = m_phi * np.sqrt(9)
 args = np.array([a, m_chi, m_phi])
 
-extent = (0.69, 1.0, -0.1, 0.8)
-p_start, p_stop = -15.0, 15.0
-x_start, x_stop = -5.0, 5.0
+extent = (-1.05, 1.05, -1.05, 1.05)
+phi_start, phi_stop = -15.0, 15.0
+chi_start, chi_stop = -5.0, 5.0
 N = 5000
 
 ################################################################################
@@ -64,8 +64,8 @@ N = 5000
 ################################################################################
 potential = anguelova.calc_V_array(
   args,
-  [p_start, x_start],
-  [p_stop, x_stop],
+  [phi_start, chi_start],
+  [phi_stop, chi_stop],
   [N, N]
 )
 np.save("./out/angular_potential.npy", potential)
@@ -80,6 +80,9 @@ del leading
 delta = anguelova.calc_delta(args, *extent)
 np.save("./out/angular_delta.npy", delta)
 del delta
+omega = anguelova.calc_omega(args, *extent)
+np.save("./out/angular_omega.npy", omega)
+del omega
 
 qdif = anguelova.flag_quantum_dif(args, *extent, accuracy=1e-2)
 np.save("./out/angular_qdif.npy", qdif)
