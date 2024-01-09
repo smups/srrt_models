@@ -125,6 +125,9 @@ del delta
 omega = anguelova.calc_omega(parameters, *extent, N_x0=N, N_x1=N)
 np.save("./out/d5_omega.npy", omega)
 del omega
+epsilon = anguelova.calc_epsilon(parameters, *extent, N_x0=N, N_x1=N)
+np.save("./out/d5_epsilon.npy", epsilon)
+del epsilon
 
 qdif = anguelova.flag_quantum_dif(parameters, *extent, N_x0=N, N_x1=N, accuracy=1e-2)
 np.save("./out/d5_qdif.npy", qdif)

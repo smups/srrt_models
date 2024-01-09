@@ -39,7 +39,7 @@ hesse = inflatox.SymbolicCalculation.new_from_list(
   silent=True
 ).execute([[0,1]])
 
-out = inflatox.Compiler(hesse).compile()
+out = inflatox.Compiler(hesse, cleanup=False).compile()
 out.print_sym_lookup_table()
 
 ################################################################################
@@ -68,21 +68,24 @@ potential = anguelova.calc_V_array(
   [phi_stop, chi_stop],
   [N, N]
 )
-np.save("./out/angular_potential.npy", potential)
-del potential
+# np.save("./out/angular_potential.npy", potential)
+# del potential
 
-exact = anguelova.evaluate(args, *extent, order='exact')
-np.save("./out/angular_exact.npy", exact)
-del exact
-leading = anguelova.evaluate(args, *extent, order='leading')
-np.save("./out/angular_leading.npy", leading)
-del leading
-delta = anguelova.calc_delta(args, *extent)
-np.save("./out/angular_delta.npy", delta)
-del delta
-omega = anguelova.calc_omega(args, *extent)
-np.save("./out/angular_omega.npy", omega)
-del omega
+# exact = anguelova.evaluate(args, *extent, order='exact')
+# np.save("./out/angular_exact.npy", exact)
+# del exact
+# leading = anguelova.evaluate(args, *extent, order='leading')
+# np.save("./out/angular_leading.npy", leading)
+# del leading
+# delta = anguelova.calc_delta(args, *extent)
+# np.save("./out/angular_delta.npy", delta)
+# del delta
+# omega = anguelova.calc_omega(args, *extent)
+# np.save("./out/angular_omega.npy", omega)
+# del omega
+epsilon = anguelova.calc_epsilon(args, *extent)
+np.save("./out/angular_epsilon.npy", epsilon)
+del epsilon
 
-qdif = anguelova.flag_quantum_dif(args, *extent, accuracy=1e-2)
-np.save("./out/angular_qdif.npy", qdif)
+# qdif = anguelova.flag_quantum_dif(args, *extent, accuracy=1e-2)
+# np.save("./out/angular_qdif.npy", qdif)
