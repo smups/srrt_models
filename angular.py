@@ -4,6 +4,7 @@ import numpy as np
 import inflatox
 
 print("[Angular inflation script]")
+model = "angular"
 
 ################################################################################
 #                                 model set-up                                 #
@@ -34,6 +35,7 @@ hesse = inflatox.SymbolicCalculation.new_from_list(
   coords,
   metric,
   V,
+  model_name="angular inflation",
   assertions=False,
   simplification_depth=1,
   silent=True
@@ -62,30 +64,34 @@ N = 5000
 ################################################################################
 #                             run and save numerics                            #
 ################################################################################
+
+#Calculate potential
 potential = anguelova.calc_V_array(
   args,
   [phi_start, chi_start],
   [phi_stop, chi_stop],
   [N, N]
 )
-# np.save("./out/angular_potential.npy", potential)
-# del potential
+np.save("./out/angular_potential.npy", potential)
+del potential
 
-# exact = anguelova.evaluate(args, *extent, order='exact')
-# np.save("./out/angular_exact.npy", exact)
-# del exact
-# leading = anguelova.evaluate(args, *extent, order='leading')
-# np.save("./out/angular_leading.npy", leading)
-# del leading
-# delta = anguelova.calc_delta(args, *extent)
-# np.save("./out/angular_delta.npy", delta)
-# del delta
-# omega = anguelova.calc_omega(args, *extent)
-# np.save("./out/angular_omega.npy", omega)
-# del omega
-epsilon = anguelova.calc_epsilon(args, *extent)
-np.save("./out/angular_epsilon.npy", epsilon)
-del epsilon
+#run analysis
+consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis(
+  args,
+  *extent,
+  *[N, N]
+)
+np.save(f"./out/{model}.npy", consistency)
+np.save(f"./out/{model}_epsilon_V.npy", epsilon_V)
+np.save(f"./out/{model}_epsilon_H.npy", epsilon_H)
+np.save(f"./out/{model}_eta_H.npy", eta_H)
+np.save(f"./out/{model}_delta.npy", delta)
+np.save(f"./out/{model}_omega.npy", omega)
 
-# qdif = anguelova.flag_quantum_dif(args, *extent, accuracy=1e-2)
-# np.save("./out/angular_qdif.npy", qdif)
+#run Anguelova's original condition
+consistency_old = anguelova.consistency_only_old(
+  args,
+  *extent,
+  *[N, N]
+)
+np.save(f"./out/{model}_old.npy", consistency_old)

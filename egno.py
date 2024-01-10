@@ -4,6 +4,7 @@ import numpy as np
 import inflatox
 
 print("[EGNO supergravity inflation script]")
+model = "egno"
 
 ################################################################################
 #                                 model set-up                                 #
@@ -76,31 +77,34 @@ extent = (0.46, 0.50, θ_start, θ_stop)
 ################################################################################
 #                             run and save numerics                            #
 ################################################################################
-# exact = anguelova.evaluate(args, *extent, N_x0=N_r, N_x1=N_θ, order='exact')
-# np.save("./out/egno_exact.npy", exact)
-# del exact
-# leading = anguelova.evaluate(args, *extent, N_x0=N_r, N_x1=N_θ, order='leading')
-# np.save("./out/egno_leading.npy", leading)
-# del leading
-# delta = anguelova.calc_delta(args, *extent, N_x0=N_r, N_x1=N_θ)
-# np.save("./out/egno_delta.npy", delta)
-# del delta
-# omega = anguelova.calc_omega(args, *extent, N_x0=N_r, N_x1=N_θ)
-# np.save("./out/egno_omega.npy", omega)
-# del omega
-epsilon = anguelova.calc_epsilon(args, *extent, N_x0=N_r, N_x1=N_θ)
-np.save("./out/egno_epsilon.npy", epsilon)
-del epsilon
 
-# qdif = anguelova.flag_quantum_dif(args, *extent, accuracy=1e-2)
-# np.save("./out/egno_qdif.npy", qdif)
-# del qdif
+#Calculate potential
+potential = anguelova.calc_V_array(
+  args,
+  [r_start, r_stop],
+  [θ_start, θ_stop],
+  [N_r, N_θ]
+)
+np.save(f"./out/{model}_potential.npy", potential)
+del potential
 
-# r_start, r_stop = 0.4, 0.6
-# potential = anguelova.calc_V_array(
-#   args,
-#   [r_start, θ_start],
-#   [r_stop, θ_stop],
-#   [N_r, N_θ]
-# )
-# np.save("./out/egno_potential.npy", potential)
+#run analysis
+consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis(
+  args,
+  *extent,
+  *[N_r, N_θ]
+)
+np.save(f"./out/{model}.npy", consistency)
+np.save(f"./out/{model}_epsilon_V.npy", epsilon_V)
+np.save(f"./out/{model}_epsilon_H.npy", epsilon_H)
+np.save(f"./out/{model}_eta_H.npy", eta_H)
+np.save(f"./out/{model}_delta.npy", delta)
+np.save(f"./out/{model}_omega.npy", omega)
+
+#run Anguelova's original condition
+consistency_old = anguelova.consistency_only_old(
+  args,
+  *extent,
+  *[N_r, N_θ]
+)
+np.save(f"./out/{model}_old.npy", consistency_old)
