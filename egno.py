@@ -51,7 +51,7 @@ hesse = inflatox.SymbolicCalculation.new_from_list(
   silent=True
 ).execute([[0,1]])
 
-out = inflatox.Compiler(hesse).compile()
+out = inflatox.Compiler(hesse, silent=False).compile()
 out.print_sym_lookup_table()
 
 ################################################################################
