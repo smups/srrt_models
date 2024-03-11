@@ -87,7 +87,7 @@ out = inflatox.Compiler(hesse).compile()
 out.print_sym_lookup_table()
 
 ################################################################################
-#                                   paramters                                  #
+#                                   parameters                                 #
 ################################################################################
 
 from inflatox.consistency_conditions import AnguelovaLazaroiuCondition

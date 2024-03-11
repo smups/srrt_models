@@ -55,7 +55,7 @@ out = inflatox.Compiler(hesse, silent=False).compile()
 out.print_sym_lookup_table()
 
 ################################################################################
-#                                   paramters                                  #
+#                                   parameters                                 #
 ################################################################################
 
 from inflatox.consistency_conditions import AnguelovaLazaroiuCondition
