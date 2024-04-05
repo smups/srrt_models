@@ -16,14 +16,13 @@ fields = [phi, chi]
 
 # M = ~10^-3
 
-M, mh = sympy.symbols('M m_h')
+L, m = sympy.symbols('L m')
 metric = [
-  [(1 + 2*chi**2/M**2), 0],
+  [sympy.cosh(chi/L)**2, 0],
   [0, 1]
 ]
 
-V0 = sympy.symbols('V0')
-potential = 
+potential = (1/2 * (m * phi)**2 + 1/2 * (m * chi)**2 * (phi / L)).nsimplify()
 
 print(f"metric tensor: {metric}")
 print(f"potential: {potential}")
@@ -39,7 +38,7 @@ hesse = inflatox.SymbolicCalculation.new_from_list(
   assertions=False,
   simplification_depth=1,
   silent=True,
-  model_name="hyperinflation"
+  model_name="hyperinflation (Christodoulidis 1903.03513)"
 ).execute([[0,1]])
 
 out = inflatox.Compiler(hesse).compile()
@@ -52,23 +51,14 @@ out.print_sym_lookup_table()
 from inflatox.consistency_conditions import AnguelovaLazaroiuCondition
 anguelova = AnguelovaLazaroiuCondition(out)
 
-V0 = -1.17e-8
-N = 1000.0
-gs = 0.01
-ls = 501.961
-u = 50*ls
-q = 1.0
-p = 5.0
-a0 = 0.001
-a1 = 0.0005
-b1 = 0.001
+L = 0.01
+m = 1
+parameters = np.array([m, L])
 
-parameters = np.array([V0, a0, p, q, u, ls, a1, b1, gs, N])
-
-r_start, r_stop = 0.0, 36.0
-θ_start, θ_stop = 0.0, 4*np.pi
-extent = (r_start, r_stop, θ_start, θ_stop)
-N = 1200
+phi_start, phi_stop = 0, 80
+chi_start, chi_stop = -.05, .05
+extent = (phi_start, phi_stop, chi_start, chi_stop)
+N = 1000
 
 ################################################################################
 #                             run and save numerics                            #
@@ -77,8 +67,8 @@ N = 1200
 #Calculate potential
 potential = anguelova.calc_V_array(
   parameters,
-  [r_start, r_stop],
-  [θ_start, θ_stop],
+  [phi_start, phi_stop],
+  [chi_start, chi_stop],
   [N, N]
 )
 np.save(f"./out/{model}_potential.npy", potential)
@@ -98,23 +88,23 @@ np.save(f"./out/{model}_delta.npy", delta)
 np.save(f"./out/{model}_omega.npy", omega)
 
 #run analysis on trajectory
-trajectory = np.loadtxt('./trajectories/d5_trajectory.dat')
+# trajectory = np.loadtxt('./trajectories/d5_trajectory.dat')
 
-consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_on_trajectory(
-  parameters,
-  trajectory
-)
-np.save(f"./out/{model}_ot.npy", consistency)
-np.save(f"./out/{model}_ot_epsilon_V.npy", epsilon_V)
-np.save(f"./out/{model}_ot_epsilon_H.npy", epsilon_H)
-np.save(f"./out/{model}_ot_eta_H.npy", eta_H)
-np.save(f"./out/{model}_ot_delta.npy", delta)
-np.save(f"./out/{model}_ot_omega.npy", omega)
+# consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_on_trajectory(
+#   parameters,
+#   trajectory
+# )
+# np.save(f"./out/{model}_ot.npy", consistency)
+# np.save(f"./out/{model}_ot_epsilon_V.npy", epsilon_V)
+# np.save(f"./out/{model}_ot_epsilon_H.npy", epsilon_H)
+# np.save(f"./out/{model}_ot_eta_H.npy", eta_H)
+# np.save(f"./out/{model}_ot_delta.npy", delta)
+# np.save(f"./out/{model}_ot_omega.npy", omega)
 
 #run Anguelova's original condition
-consistency_old = anguelova.consistency_only_old(
-  parameters,
-  *extent,
-  *[N, N]
-)
-np.save(f"./out/{model}_old.npy", consistency_old)
+# consistency_old = anguelova.consistency_only_old(
+#   parameters,
+#   *extent,
+#   *[N, N]
+# )
+# np.save(f"./out/{model}_old.npy", consistency_old)
