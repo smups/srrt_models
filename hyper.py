@@ -14,8 +14,6 @@ model = "hyper"
 phi, chi = sympy.symbols('φ χ')
 fields = [phi, chi]
 
-# M = ~10^-3
-
 L, m = sympy.symbols('L m')
 metric = [
   [sympy.cosh(chi/L)**2, 0],
@@ -74,6 +72,14 @@ potential = anguelova.calc_V_array(
 np.save(f"./out/{model}_potential.npy", potential)
 del potential
 
+# hesse = anguelova.calc_H_array(
+#   parameters,
+#   *[phi_start, phi_stop],
+#   *[chi_start, chi_stop],
+#   [N, N]
+# )
+# np.save(f"./out/{model}_hesse.npy", hesse)
+
 #run analysis
 consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis(
   parameters,
@@ -88,23 +94,23 @@ np.save(f"./out/{model}_delta.npy", delta)
 np.save(f"./out/{model}_omega.npy", omega)
 
 #run analysis on trajectory
-# trajectory = np.loadtxt('./trajectories/d5_trajectory.dat')
+trajectory = np.loadtxt('./trajectories/d5_trajectory.dat')
 
-# consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_on_trajectory(
-#   parameters,
-#   trajectory
-# )
-# np.save(f"./out/{model}_ot.npy", consistency)
-# np.save(f"./out/{model}_ot_epsilon_V.npy", epsilon_V)
-# np.save(f"./out/{model}_ot_epsilon_H.npy", epsilon_H)
-# np.save(f"./out/{model}_ot_eta_H.npy", eta_H)
-# np.save(f"./out/{model}_ot_delta.npy", delta)
-# np.save(f"./out/{model}_ot_omega.npy", omega)
+consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_ot(
+  parameters,
+  trajectory
+)
+np.save(f"./out/{model}_ot.npy", consistency)
+np.save(f"./out/{model}_ot_epsilon_V.npy", epsilon_V)
+np.save(f"./out/{model}_ot_epsilon_H.npy", epsilon_H)
+np.save(f"./out/{model}_ot_eta_H.npy", eta_H)
+np.save(f"./out/{model}_ot_delta.npy", delta)
+np.save(f"./out/{model}_ot_omega.npy", omega)
 
 #run Anguelova's original condition
-# consistency_old = anguelova.consistency_only_old(
-#   parameters,
-#   *extent,
-#   *[N, N]
-# )
-# np.save(f"./out/{model}_old.npy", consistency_old)
+consistency_rapidturn = anguelova.consistency_rapidturn(
+  parameters,
+  *extent,
+  *[N, N]
+)
+np.save(f"./out/{model}_old.npy", consistency_rapidturn)

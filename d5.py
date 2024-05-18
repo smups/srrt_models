@@ -141,7 +141,7 @@ np.save(f"./out/{model}_omega.npy", omega)
 #run analysis on trajectory
 trajectory = np.loadtxt('./trajectories/d5_trajectory.dat')
 
-consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_on_trajectory(
+consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_ot(
   parameters,
   trajectory
 )
@@ -153,9 +153,9 @@ np.save(f"./out/{model}_ot_delta.npy", delta)
 np.save(f"./out/{model}_ot_omega.npy", omega)
 
 #run Anguelova's original condition
-consistency_old = anguelova.consistency_only_old(
+consistency_rapidturn = anguelova.consistency_rapidturn(
   parameters,
   *extent,
   *[N, N]
 )
-np.save(f"./out/{model}_old.npy", consistency_old)
+np.save(f"./out/{model}_old.npy", consistency_rapidturn)

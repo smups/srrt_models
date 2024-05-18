@@ -36,7 +36,7 @@ hesse = inflatox.SymbolicCalculation.new_from_list(
   assertions=False,
   simplification_depth=1,
   silent=True,
-  model_name="hyperinflation (Christodoulidis 1903.03513)"
+  model_name="side-tracked inflation (1804.11279)"
 ).execute([[0,1]])
 
 out = inflatox.Compiler(hesse).compile()
@@ -55,7 +55,7 @@ f = 10
 parameters = np.array([m, f, M])
 
 phi_start, phi_stop = -0.5*f, 3.5*f
-chi_start, chi_stop = -1.5*M, 1.5*M 
+chi_start, chi_stop = -3*M, 3*M 
 extent = (phi_start, phi_stop, chi_start, chi_stop)
 N = 1000
 
@@ -101,9 +101,9 @@ np.save(f"./out/{model}_omega.npy", omega)
 # np.save(f"./out/{model}_ot_omega.npy", omega)
 
 #run Anguelova's original condition
-# consistency_old = anguelova.consistency_only_old(
-#   parameters,
-#   *extent,
-#   *[N, N]
-# )
-# np.save(f"./out/{model}_old.npy", consistency_old)
+consistency_rapidturn = anguelova.consistency_rapidturn(
+  parameters,
+  *extent,
+  *[N, N]
+)
+np.save(f"./out/{model}_old.npy", consistency_rapidturn)

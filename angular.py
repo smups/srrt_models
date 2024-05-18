@@ -93,7 +93,7 @@ tx = np.load('./trajectories/angular_phix.npy')
 ty = np.load('./trajectories/angular_phiy.npy')
 trajectory = np.column_stack((tx, ty))
 
-consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_on_trajectory(
+consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_ot(
   args,
   trajectory
 )
@@ -105,7 +105,7 @@ np.save(f"./out/{model}_ot_delta.npy", delta)
 np.save(f"./out/{model}_ot_omega.npy", omega)
 
 #run Anguelova's original condition
-consistency_old = anguelova.consistency_only_old(
+consistency_old = anguelova.consistency_rapidturn(
   args,
   *extent,
   *[N, N]

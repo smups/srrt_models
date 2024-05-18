@@ -102,9 +102,9 @@ np.save(f"./out/{model}_delta.npy", delta)
 np.save(f"./out/{model}_omega.npy", omega)
 
 #run Anguelova's original condition
-consistency_old = anguelova.consistency_only_old(
+consistency_rapidturn = anguelova.consistency_rapidturn(
   args,
   *extent,
   *[N_r, N_θ]
 )
-np.save(f"./out/{model}_old.npy", consistency_old)
+np.save(f"./out/{model}_old.npy", consistency_rapidturn)
