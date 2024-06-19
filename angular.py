@@ -39,7 +39,7 @@ hesse = inflatox.SymbolicCalculation.new_from_list(
   assertions=False,
   simplification_depth=1,
   silent=True
-).execute([[0,1]])
+).execute()
 
 out = inflatox.Compiler(hesse, cleanup=False).compile()
 out.print_sym_lookup_table()
@@ -48,8 +48,8 @@ out.print_sym_lookup_table()
 #                                   parameters                                 #
 ################################################################################
 
-from inflatox.consistency_conditions import AnguelovaLazaroiuCondition
-anguelova = AnguelovaLazaroiuCondition(out)
+from inflatox.consistency_conditions import GeneralisedAL
+anguelova = GeneralisedAL(out)
 
 a = 1/600
 m_phi = 2e-5

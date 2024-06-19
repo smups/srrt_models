@@ -49,7 +49,7 @@ hesse = inflatox.SymbolicCalculation.new_from_list(
   simplify_for='length',
   simplification_depth=1,
   silent=True
-).execute([[0,1]])
+).execute()
 
 out = inflatox.Compiler(hesse, silent=False).compile()
 out.print_sym_lookup_table()
@@ -58,8 +58,8 @@ out.print_sym_lookup_table()
 #                                   parameters                                 #
 ################################################################################
 
-from inflatox.consistency_conditions import AnguelovaLazaroiuCondition
-anguelova = AnguelovaLazaroiuCondition(out)
+from inflatox.consistency_conditions import GeneralisedAL
+anguelova = GeneralisedAL(out)
 
 alpha = 1.0
 a = 0.5
@@ -101,10 +101,26 @@ np.save(f"./out/{model}_eta_H.npy", eta_H)
 np.save(f"./out/{model}_delta.npy", delta)
 np.save(f"./out/{model}_omega.npy", omega)
 
+#run analysis on trajectory
+tr = np.load('./trajectories/egno_r.npy')
+ttheta = np.load('./trajectories/egno_theta.npy')
+trajectory = np.column_stack((tr, ttheta))
+
+consistency, epsilon_V, epsilon_H, eta_H, delta, omega = anguelova.complete_analysis_ot(
+  args,
+  trajectory
+)
+np.save(f"./out/{model}_ot.npy", consistency)
+np.save(f"./out/{model}_ot_epsilon_V.npy", epsilon_V)
+np.save(f"./out/{model}_ot_epsilon_H.npy", epsilon_H)
+np.save(f"./out/{model}_ot_eta_H.npy", eta_H)
+np.save(f"./out/{model}_ot_delta.npy", delta)
+np.save(f"./out/{model}_ot_omega.npy", omega)
+
 #run Anguelova's original condition
-consistency_rapidturn = anguelova.consistency_rapidturn(
+consistency_old = anguelova.consistency_rapidturn(
   args,
   *extent,
   *[N_r, N_θ]
 )
-np.save(f"./out/{model}_old.npy", consistency_rapidturn)
+np.save(f"./out/{model}_old.npy", consistency_old)
